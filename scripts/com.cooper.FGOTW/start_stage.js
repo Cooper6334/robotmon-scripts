@@ -124,7 +124,7 @@ function selectStage(useApple){
         releaseImage(screenShot2);
         if(useApple != 4){
             tapScale(1700,1135,100);
-            sleep(2000);
+            sleep(5000);
             if(server == "TW"){
                 tapScale(1600,475,100);
                 sleep(1000);
