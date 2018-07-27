@@ -202,7 +202,6 @@ function useSkill(player,skill,target,checkUsed){
         selectSkillTarget(target);
     }
     releaseImage(screenShot2);
-    sleep(3000);
 }
 
 function selectSkillTarget(player){
@@ -288,7 +287,7 @@ function useClothesSkill(skill,target1,target2){
         releaseImage(screenShot);
         return;
     }
-    sleep(3000);
+    waitUntilPlayerCanMove();
 }
 
 function selectEnemy(enemy){

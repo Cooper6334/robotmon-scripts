@@ -93,7 +93,6 @@ function autoAttack(until,mainColor,sameColor,weak,die,p0ult,p0s0,p0t0,p0s1,p0t1
             console.log("One turn break AutoAttack");
             break;
         }
-        sleep(5000);
     }
     if(servantInited){
         for(var i=0;i<3;i++){
@@ -188,6 +187,7 @@ function attackAI(mainColor,sameColor,weak,die,ult,skill,currentStage){
             }
         }
     }
+    waitUntilPlayerCanMove();
     console.log("skill use finish");
     startAttack();
     console.log("startAttack finish");
@@ -282,7 +282,6 @@ function attackAI(mainColor,sameColor,weak,die,ult,skill,currentStage){
             return;
         }
     }
-    sleep(5000);
 }
 
 function updateUltList(){
