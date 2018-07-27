@@ -151,6 +151,9 @@ function selectStage(useApple){
 
 function selectFriend(filter,servant,item,star){
     console.log("select friend");
+    var nScrolls = 3;
+    var maxScrolls = 6;
+    var nRetry = 0;
     sleep(500);
     if(!isScriptRunning){
         return;
@@ -190,7 +193,7 @@ function selectFriend(filter,servant,item,star){
                 tapScale(selectFriendPosition[i],250,100);
                 sleep(1000);
             }
-            for(var j = 0;j < 3;j++){ //loop for scroll
+            for(var j = 0;j < nScrolls;j++){ //loop for scroll
                 if(!isScriptRunning){
                     return;
                 }
@@ -262,12 +265,17 @@ function selectFriend(filter,servant,item,star){
                     sleep(3000);
                     return;
                 }
-                if(j < 2){
+                if(j < (nScrolls-1)){
                     scrollFriendList();
                 }
             }
         }
         reloadFriend();
+        nRetry += 1;
+        if ((nScrolls < maxScrolls) && ((nRetry % 2) == 0)) {
+            nScrolls += 1;
+            console.log("Scroll down "+nScrolls+" times");
+        }
     }
 }
 
