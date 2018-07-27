@@ -69,16 +69,19 @@ function waitUntilPlayerCanMoveOrFinish(){
             isScriptRunning = false;
             releaseImage(screenShot);
             return false;
-        }
-        releaseImage(screenShot);
-        if(checkPlayerCanMove()){
-            console.log("Player can move");
-            return true;
-        }
-        var q = isQuestFinish();
-        if(q >= 0){
-            console.log("Quest finish "+q);
-            return false;            
+        } else if(checkImage(screenShot,stageNotFinishImage,1950,1400,150,20)){
+            releaseImage(screenShot);
+            if(checkPlayerCanMove()){
+                console.log("Player can move");
+                return true;
+            }
+        } else {
+            releaseImage(screenShot);
+            var q = isQuestFinish();
+            if(q >= 0){
+                console.log("Quest finish "+q);
+                return false;
+            }
         }
     }
 }
