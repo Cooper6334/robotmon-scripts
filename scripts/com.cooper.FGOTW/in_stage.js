@@ -15,19 +15,22 @@ function checkPlayerCanMove(){
     var y = [1285,370,600];
     var w = [220,120,120];
     var h = [65,80,80];
-    var r = [true,true];
     for(var j = 0;j<2;j++){
         var screenShot = getScreenshot();
         for(var i = 0;i<3;i++){
             if(!checkImage(screenShot,selectStartImage[i],x[i],y[i],w[i],h[i])){
-                r[j] = false;
-                break;
+                releaseImage(screenShot);
+                tapScale(1280,720,100);
+                sleep(1000);
+                return false;
             }
         }
         releaseImage(screenShot);
-        sleep(1000);
+        if (j == 0) {
+            sleep(1000);
+        }
     }
-    return r[0]&&r[1];
+    return true;
 }
 
 function waitUntilPlayerCanMove(){
