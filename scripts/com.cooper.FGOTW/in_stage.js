@@ -48,7 +48,14 @@ function waitUntilPlayerCanMove(){
         }
         sleep(1500);
     }*/
-    return waitUntilPlayerCanMoveOrFinish();
+    var ongoing  = waitUntilPlayerCanMoveOrFinish();
+    if (ongoing) {
+        return true;
+    } else {
+        console.log("Double check if the quest is really finished");
+        sleep(1000);
+        return waitUntilPlayerCanMoveOrFinish();
+    }
 }
 
 function waitUntilPlayerCanMoveOrFinish(){
