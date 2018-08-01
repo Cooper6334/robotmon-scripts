@@ -12,7 +12,7 @@
     },
     "com.r2studio.Tsum": {
       "title": "Tsum Tsum AutoPlay",
-      "versionCode": 42,
+      "versionCode": 43,
       "description": "<h1>Tsum Tsum</h1><ul><li>⭐ Supports all resolutions</li><li>⭐ New Quick Play Mode(新增快速計算模式)</li><li>Supported more skills</li><li>Bubble item</li></ul>",
       "packageName": "com.linecorp.LGTMTMG",
       "downloadURL": "https://github.com/r2-studio/robotmon-scripts/raw/master/scripts/com.r2studio.Tsum/index.zip",
@@ -87,7 +87,7 @@
     },
     "com.r2studio.TapTitans2": {
       "title": "TapTitans2 automated",
-      "versionCode": 9.5,
+      "versionCode": 9.6,
       "description": "<div>Make the relics rain! / 自動愛心農場!</div>",
       "packageName": "com.gamehivecorp.taptitans2",
       "downloadURL": "https://github.com/r2-studio/robotmon-scripts/raw/master/scripts/com.r2studio.TapTitans2/index.zip"
@@ -108,8 +108,8 @@
     },
     "com.cooper.FGOTW": {
       "title": "Fate/Grand Order 台服",
-      "versionCode": 1.26,
-      "description": "<div>V1.26修正低效能手機會卡在使用技能與吃果的問題<br><br>V1.25修正白色背景關卡會造成腳本錯亂的問題<br><br>Android手機、夜神模擬器<br>功能包括：自動周回、吃果、辨識好友與禮裝、自動戰鬥施放技能寶具、友抽、抽箱</div>",
+      "versionCode": 1.27,
+      "description": "<div>V1.27修正Wave辨識與強化快速抽箱功能<br><br>V1.26修正低效能手機會卡在使用技能與吃果的問題<br><br>Android手機、夜神模擬器<br>功能包括：自動周回、吃果、辨識好友與禮裝、自動戰鬥施放技能寶具、友抽、抽箱</div>",
       "packageName": "com.xiaomeng.fategrandorder",
       "downloadURL": "https://github.com/r2-studio/robotmon-scripts/raw/master/scripts/com.cooper.FGOTW/index.zip"
     }
