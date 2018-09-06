@@ -151,9 +151,6 @@ function selectStage(useApple){
 
 function selectFriend(filter,servant,item,star){
     console.log("select friend");
-    var nScrolls = 3;
-    var maxScrolls = 6;
-    var nRetry = 0;
     sleep(500);
     if(!isScriptRunning){
         return;
@@ -192,12 +189,28 @@ function selectFriend(filter,servant,item,star){
                 t *= 2;
                 tapScale(selectFriendPosition[i],250,100);
                 sleep(1000);
+                tapScale(2480,360,50);
+                sleep(1000);
             }
-            for(var j = 0;j < nScrolls;j++){ //loop for scroll
+            var keep_going = true;
+            var offset = 0;
+            for(var j = 0;j < 10;j++) { //loop for scroll
                 if(!isScriptRunning){
                     return;
                 }
                 var screenShot = getScreenshot();
+                if (j == 0 && !checkImage(screenShot, arrowUpImage, 2452, 340, 56, 28)) {
+                    console.log("Nothing to scroll");
+                    keep_going = false;
+                }
+                if (keep_going && checkImage(screenShot, arrowDownImage, 2452, 1396, 56, 28)) {
+                    console.log("End of list");
+                    sleep(2000);
+                    offset = 240;
+                    keep_going = false;
+                    releaseImage(screenShot);
+                    continue;
+                }
                 var friend1;
                 var friend2;
                 if(servantImage == undefined && itemImage == undefined){
@@ -211,10 +224,10 @@ function selectFriend(filter,servant,item,star){
                     var i2 = true;
                     var star2 = true;
                     if(servantImage != undefined){
-                        if(!checkImage(screenShot,servantImage,100,460,310,195)){
+                        if(!checkImage(screenShot,servantImage,100,460+offset,310,195)){
                             s1 = false;
                         }
-                        if(!checkImage(screenShot,servantImage,100,860,310,195)){
+                        if(!checkImage(screenShot,servantImage,100,860+offset,310,195)){
                             s2 = false;
                         }
                     }
@@ -233,15 +246,15 @@ function selectFriend(filter,servant,item,star){
                         }else if(server == "TW"){
                             var itemSize = getImageSize(itemImage);
                             var shortImage = cropImage(itemImage,0,0,itemSize.width,((itemSize.height * 0.667) | 0));
-                            if(!checkImage(screenShot,shortImage,100,655,310,60,0.9)){
+                            if(!checkImage(screenShot,shortImage,100,655+offset,310,60,0.9)){
                                 i1 = false;
-                            }else if(star == 1 && !checkStar(screenShot,erodedImage,maskImage,360,696,46,46)){
+                            }else if(star == 1 && !checkStar(screenShot,erodedImage,maskImage,360,696+offset,46,46)){
                             //}else if(star == 1 && !checkImage(screenShot,starImage,377,713,14,14)){
                                 star1 = false;
                             }
-                            if(!checkImage(screenShot,shortImage,100,1055,310,60,0.9)){
+                            if(!checkImage(screenShot,shortImage,100,1055+offset,310,60,0.9)){
                                 i2 = false;
-                            }else if(star == 1 && !checkStar(screenShot,erodedImage,maskImage,360,1096,46,46)){
+                            }else if(star == 1 && !checkStar(screenShot,erodedImage,maskImage,360,1096+offset,46,46)){
                             //}else if(star == 1 && !checkImage(screenShot,starImage,377,1113,14,14)){
                                 star2 = false;
                             }
@@ -250,13 +263,13 @@ function selectFriend(filter,servant,item,star){
                     }
                     friend1 = s1 && i1 && star1;
                     friend2 = s2 && i2 && star2;
-                }            
+                }
                 releaseImage(screenShot);
                 if(friend1||friend2){
                     if(friend1){
-                        tapScale(900,535,100);
+                        tapScale(900,535+offset,100);
                     }else if(friend2){
-                        tapScale(900,935,100);
+                        tapScale(900,935+offset,100);
                     }
                     if(servantImage!=undefined){
                         releaseImage(servantImage);
@@ -267,17 +280,14 @@ function selectFriend(filter,servant,item,star){
                     sleep(3000);
                     return;
                 }
-                if(j < (nScrolls-1)){
+                if (keep_going){
                     scrollFriendList();
+                } else {
+                    break;
                 }
             }
         }
         reloadFriend();
-        nRetry += 1;
-        if ((nScrolls < maxScrolls) && ((nRetry % 2) == 0)) {
-            nScrolls += 1;
-            console.log("Scroll down "+nScrolls+" times");
-        }
     }
 }
 

@@ -176,6 +176,9 @@ function loadImage(){
     erodedImage = openImage(imagePath+"Eroded.png");
     useItemImage = openImage(imagePath+"UseItem.png");
 
+    arrowUpImage = openImage(imagePath+"ArrowUp.png");
+    arrowDownImage = openImage(imagePath+"ArrowDown.png");
+
     ultFailedImage = openImage(imagePath+"UltFailed.png");
 
 /*
