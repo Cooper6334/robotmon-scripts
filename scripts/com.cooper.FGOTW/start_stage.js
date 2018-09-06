@@ -235,12 +235,14 @@ function selectFriend(filter,servant,item,star){
                             var shortImage = cropImage(itemImage,0,0,itemSize.width,((itemSize.height * 0.667) | 0));
                             if(!checkImage(screenShot,shortImage,100,655,310,60,0.9)){
                                 i1 = false;
-                            }else if(star == 1 && !checkStar(screenShot,0)){
+                            }else if(star == 1 && !checkStar(screenShot,erodedImage,maskImage,360,696,46,46)){
+                            //}else if(star == 1 && !checkImage(screenShot,starImage,377,713,14,14)){
                                 star1 = false;
                             }
                             if(!checkImage(screenShot,shortImage,100,1055,310,60,0.9)){
                                 i2 = false;
-                            }else if(star == 1 && !checkStar(screenShot,1)){
+                            }else if(star == 1 && !checkStar(screenShot,erodedImage,maskImage,360,1096,46,46)){
+                            //}else if(star == 1 && !checkImage(screenShot,starImage,377,1113,14,14)){
                                 star2 = false;
                             }
                             releaseImage(shortImage);
