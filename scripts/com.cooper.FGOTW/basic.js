@@ -36,6 +36,8 @@ var presentBoxFullImgae;
 var ultFailedImage;
 var erodedImage;
 var maskImage;
+var arrowUpImage;
+var arrowDownImage;
 
 var selectStartImage = [];
 var selectBackImage;
@@ -175,6 +177,9 @@ function loadImage(){
     erodedImage = openImage(imagePath+"Eroded.png");
     useItemImage = openImage(imagePath+"UseItem.png");
 
+    arrowUpImage = openImage(imagePath+"ArrowUp.png");
+    arrowDownImage = openImage(imagePath+"ArrowDown.png");
+
     ultFailedImage = openImage(imagePath+"UltFailed.png");
 
 /*
@@ -249,6 +254,8 @@ function releaseAllImage(){
 
     releaseImage(erodedImage);
     releaseImage(maskImage);
+    releaseImage(arrowUpImage);
+    releaseImage(arrowDownImage);
 }
 
 function initScreenSize(){
