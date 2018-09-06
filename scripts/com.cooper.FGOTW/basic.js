@@ -34,6 +34,8 @@ var checkBoxImage;
 var checkBoxPointImage;
 var presentBoxFullImgae;
 var ultFailedImage;
+var erodedImage;
+var maskImage;
 
 var selectStartImage = [];
 var selectBackImage;
@@ -169,6 +171,8 @@ function loadImage(){
     selectBackImage = openImage(imagePath+"SelectBack.png");
     
     starImage = openImage(imagePath+"Star.png");
+    maskImage = openImage(imagePath+"Mask.png");
+    erodedImage = openImage(imagePath+"Eroded.png");
     useItemImage = openImage(imagePath+"UseItem.png");
 
     ultFailedImage = openImage(imagePath+"UltFailed.png");
@@ -242,6 +246,9 @@ function releaseAllImage(){
     releaseImage(checkBoxImage);
     releaseImage(checkBoxPointImage);
     releaseImage(presentBoxFullImgae);
+
+    releaseImage(erodedImage);
+    releaseImage(maskImage);
 }
 
 function initScreenSize(){
@@ -347,6 +354,87 @@ function checkPixel(x,y,r,g,b){
         return true;
     }
     return false;
+}
+
+function extractStar(img, maskSmall, x, y, width, height) {
+    var realX = x * screenScale[0] - 1;
+    var realY = y * screenScale[1] - 1;
+    if(realX < 0){
+        realX = 0;
+    }
+    if(realY < 0){
+        realY = 0;
+    }
+    var cropWidth = width * screenScale[0] + 2;
+    var cropHeight = height * screenScale[1] + 2;
+    if(realX + cropWidth > realScreenSize[0]){
+        cropWidth = realScreenSize[0] - realX;
+    }
+    if(realY + cropHeight > realScreenSize[1]){
+        cropHeight = realScreenSize[1] - realY;
+    }
+
+    var maskImg = resizeImage(maskSmall,width+2/screenScale[0],height+2/screenScale[1]);
+
+    var cropReal = cropImage(img,realX,realY,cropWidth,cropHeight);
+    var crop = resizeImage(cropReal, width+2/screenScale[0], height+2/screenScale[1]);
+
+    var gray = bgrToGray(crop);
+    var mask = bgrToGray(maskImg);
+
+    threshold(gray, 180, 255);
+    eroid(gray, 3, 3, 1, 1);
+
+    var masked = cloneWithMask(gray, mask);
+    smooth(masked, 2, 5);
+
+    releaseImage(maskImg);
+    releaseImage(cropReal);
+    releaseImage(crop);
+    releaseImage(gray);
+    releaseImage(mask);
+    return masked;
+}
+
+function checkStar(screenShot,erodedSmall,maskSmall,x,y,width,height,find_threshold){
+    var size = getImageSize(screenShot);
+    if(size.width < size.height){
+        console.log("screen orientation wrong");
+        return false;
+    }
+    if(find_threshold == undefined){
+        find_threshold = 0.85;
+    }
+
+    var realScreen = screenShot;
+    if(size.width > realScreenSize[0] || size.width > realScreenSize[1]){
+        realScreen = cropImage(screenShot,screenOffset[0],screenOffset[1],realScreenSize[0],realScreenSize[1]);
+    }
+    var eroded = resizeImage(erodedSmall,width,height);
+    var star = bgrToGray(eroded);
+    smooth(star, 2, 5);
+
+
+    var currentdate = new Date();
+    var time = currentdate.getTime();
+
+    var masked = extractStar(realScreen, maskSmall, x, y, width, height);
+
+    var find = findImage(masked,star);
+
+    console.log("Find star score:");
+    console.log(find.score);
+
+    releaseImage(realScreen);
+    releaseImage(eroded);
+    releaseImage(star);
+    releaseImage(masked);
+
+    if(find.score > find_threshold) {
+        return true;
+    }else{
+        return false;
+    }
 }
 
 function checkImage(screenShot,imageSmall,x,y,width,height,threshold){
