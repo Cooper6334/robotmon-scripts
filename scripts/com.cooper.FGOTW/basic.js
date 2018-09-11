@@ -36,6 +36,7 @@ var presentBoxFullImgae;
 var ultFailedImage;
 var erodedImage;
 var maskImage;
+var handshakeImage;
 var supportImage;
 var arrowUpImage;
 var arrowDownImage;
@@ -179,6 +180,7 @@ function loadImage(){
     starImage = openImage(imagePath+"Star.png");
     maskImage = openImage(imagePath+"Mask.png");
     erodedImage = openImage(imagePath+"Eroded.png");
+    handshakeImage = openImage(imagePath+"Handshake.png");
     supportImage = openImage(imagePath+"Support.png");
     useItemImage = openImage(imagePath+"UseItem.png");
 
@@ -261,6 +263,7 @@ function releaseAllImage(){
     releaseImage(maskImage);
     releaseImage(arrowUpImage);
     releaseImage(arrowDownImage);
+    releaseImage(handshakeImage);
     releaseImage(supportImage);
 }
 
