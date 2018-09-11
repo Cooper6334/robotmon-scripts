@@ -564,6 +564,11 @@ function initFriendButton(scriptValue){
         }
     }
     $("#selectFriendItemFull"+currentId).val(scriptValue[3]).trigger('change');
+    if (scriptValue[4] == 1) {
+        $("#selectRealFriend"+currentId).prop('checked', true);
+    } else {
+        $("#selectRealFriend"+currentId).prop('checked', false);
+    }
 }
 function initCommandButton(currentId){
     $("#removeItem"+currentId).click(function(){
@@ -631,7 +636,11 @@ function getCurrentScript(){
                     if($("#selectFriendItem"+itemId).val()!=-1){
                         item = $("#selectFriendItem"+itemId).select2('data')[0].text;
                     }
-                    newScript+='selectFriend('+filter+',"'+servant+'","'+item+'",'+$("#selectFriendItemFull"+itemId).val()+');';
+                    var realFriend = 0;
+                    if($("#selectRealFriend"+itemId).is(":checked")){
+                        realFriend = 1;
+                    }
+                    newScript+='selectFriend('+filter+',"'+servant+'","'+item+'",'+$("#selectFriendItemFull"+itemId).val()+','+realFriend+');';
                     break;
                     case "選擇隊伍":
                     newScript+="selectTeam("+$("#selectTeam"+itemId).val()+");";
@@ -975,7 +984,8 @@ function getSelectFriend(id){
         '<li><label>指定從者&nbsp;&nbsp;</label>'+
         '<select id = "selectFriendServant'+id+'">'+
         '<option value = "-1" selected>無</option></select>&nbsp;&nbsp;'+
-        '<img id = "selectFriendServantImg'+id+'" height = "40" width = "60"></li>' +
+        '<img id = "selectFriendServantImg'+id+'" height = "40" width = "60">'+
+        '&nbsp;&nbsp;<input type="checkbox" id = "selectRealFriend'+id+'">好友</li>' +
         '<li><label>指定禮裝&nbsp;&nbsp;</label>'+
         '<select id = "selectFriendItem'+id+'">'+
         '<option value = "-1" selected>無</option></select>&nbsp;&nbsp;'+

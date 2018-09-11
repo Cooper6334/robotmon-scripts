@@ -149,9 +149,12 @@ function selectStage(useApple){
 }
 //-----------------------------------------------------friend list
 
-function selectFriend(filter,servant,item,star){
+function selectFriend(filter,servant,item,star,friend){
     console.log("select friend");
     sleep(500);
+    if (friend == undefined) {
+        friend = 0;
+    }
     if(!isScriptRunning){
         return;
     }
@@ -220,9 +223,11 @@ function selectFriend(filter,servant,item,star){
                     var s1 = true;
                     var i1 = true;
                     var star1 = true;
+                    var handshake1 = true;
                     var s2 = true;
                     var i2 = true;
                     var star2 = true;
+                    var handshake2 = true;
                     if (keep_going) {
                         offset = findOffset(screenShot, supportImage, 2384, 924, 28, 112);
                     }
@@ -233,6 +238,14 @@ function selectFriend(filter,servant,item,star){
                         if(!checkImage(screenShot,servantImage,100,860+offset,310,195)){
                             s2 = false;
                         }
+                    }
+                    if (friend == 1 && !checkImage(screenShot, handshakeImage,2260,568+offset,72,72)){
+                        keep_going = false;
+                        handshake1 = false;
+                    }
+                    if (friend == 1 && !checkImage(screenShot, handshakeImage,2260,968+offset,72,72)){
+                        keep_going = false;
+                        handshake2 = false;
                     }
                     if(itemImage != undefined){
                         if(server == "JP"){
@@ -264,8 +277,8 @@ function selectFriend(filter,servant,item,star){
                             releaseImage(shortImage);
                         }
                     }
-                    friend1 = s1 && i1 && star1;
-                    friend2 = s2 && i2 && star2;
+                    friend1 = s1 && i1 && star1 && handshake1;
+                    friend2 = s2 && i2 && star2 && handshake2;
                 }
                 releaseImage(screenShot);
                 if(friend1||friend2){
