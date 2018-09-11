@@ -435,34 +435,19 @@ function checkStar(screenShot,erodedSmall,maskSmall,x,y,width,height,find_thresh
     var currentdate = new Date();
     var time = currentdate.getTime();
 
-    var masked1 = extractStar(realScreen, maskSmall, x, y, width, height);
-    var masked2 = extractStar(realScreen, maskSmall, x, y-4, width, height);
-    //console.log("masked image");
-    //filePath = itemPath+"tmp_masked_"+time+".png";
-    //saveImage(masked,filePath);
+    var masked = extractStar(realScreen, maskSmall, x, y, width, height);
 
-    var find1 = findImage(masked1,star);
-    var find2 = findImage(masked2,star);
+    var find = findImage(masked,star);
 
     console.log("Find star score:");
-    console.log(find1.score);
-    console.log(find2.score);
-    if (find1.score > 0 || find2.score > 0) {
-        var filePath = itemPath+"tmp_screen_"+time+".png";
-        saveImage(realScreen,filePath);
-        filePath = itemPath+"tmp_masked1_"+time+".png";
-        saveImage(masked1,filePath);
-        filePath = itemPath+"tmp_masked2_"+time+".png";
-        saveImage(masked2,filePath);
-    }
+    console.log(find.score);
 
     releaseImage(realScreen);
     releaseImage(eroded);
     releaseImage(star);
-    releaseImage(masked1);
-    releaseImage(masked2);
+    releaseImage(masked);
 
-    if(find1.score > find_threshold || find2.score > find_threshold){
+    if(find.score > find_threshold) {
         return true;
     }else{
         return false;
