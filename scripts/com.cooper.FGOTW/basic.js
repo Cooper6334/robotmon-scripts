@@ -36,6 +36,8 @@ var presentBoxFullImgae;
 var ultFailedImage;
 var erodedImage;
 var maskImage;
+var arrowUpImage;
+var arrowDownImage;
 
 var selectStartImage = [];
 var selectBackImage;
@@ -255,6 +257,8 @@ function releaseAllImage(){
 
     releaseImage(erodedImage);
     releaseImage(maskImage);
+    releaseImage(arrowUpImage);
+    releaseImage(arrowDownImage);
 }
 
 function initScreenSize(){
