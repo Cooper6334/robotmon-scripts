@@ -36,6 +36,7 @@ var presentBoxFullImgae;
 var ultFailedImage;
 var erodedImage;
 var maskImage;
+var supportImage;
 var arrowUpImage;
 var arrowDownImage;
 
@@ -178,6 +179,7 @@ function loadImage(){
     starImage = openImage(imagePath+"Star.png");
     maskImage = openImage(imagePath+"Mask.png");
     erodedImage = openImage(imagePath+"Eroded.png");
+    supportImage = openImage(imagePath+"Support.png");
     useItemImage = openImage(imagePath+"UseItem.png");
 
     arrowUpImage = openImage(imagePath+"ArrowUp.png");
@@ -259,6 +261,7 @@ function releaseAllImage(){
     releaseImage(maskImage);
     releaseImage(arrowUpImage);
     releaseImage(arrowDownImage);
+    releaseImage(supportImage);
 }
 
 function initScreenSize(){
@@ -510,6 +513,53 @@ function checkImage(screenShot,imageSmall,x,y,width,height,threshold){
         return true;
     }else{
         return false;
+    }
+}
+
+function findOffset(screenShot,imageSmall,x,y,width,height,threshold){
+    var size = getImageSize(screenShot);
+    var searchRange = 40;
+    if(size.width < size.height){
+        console.log("screen orientation wrong");
+        return false;
+    }
+    if(threshold == undefined){
+        threshold = 0.85;
+    }
+
+    var realScreen = screenShot;
+    if(size.width > realScreenSize[0] || size.width > realScreenSize[1]){
+        realScreen = cropImage(screenShot,screenOffset[0],screenOffset[1],realScreenSize[0],realScreenSize[1]);
+    }
+
+    var targetX = (x-1) * screenScale[0];
+    var targetY = (y-searchRange) * screenScale[1];
+    if(targetX < 0){
+        targetX = 0;
+    }
+    if(targetY < 0){
+        targetY = 0;
+    }
+    var cropWidth = (width+2) * screenScale[0];
+    var cropHeight = (height+searchRange*2) * screenScale[1];
+    if(targetX + cropWidth > realScreenSize[0]){
+        cropWidth = realScreenSize[0] - targetX;
+    }
+    if(targetY + cropHeight > realScreenSize[1]){
+        cropHeight = realScreenSize[1] - targetY;
+    }
+    var crop = cropImage(realScreen,targetX,targetY,cropWidth,cropHeight);
+    var resized = resizeImage(crop,width+2,height+searchRange*2);
+    var find = findImage(resized,imageSmall);
+    releaseImage(crop);
+    releaseImage(resized);
+    releaseImage(realScreen);
+    if(find.score > threshold){
+        console.log("offset: "+(find.y-searchRange));
+        return (find.y - searchRange);
+    }else{
+        console.log("Cannot find the landmark");
+        return 0;
     }
 }
 
