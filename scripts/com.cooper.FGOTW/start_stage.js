@@ -223,6 +223,9 @@ function selectFriend(filter,servant,item,star){
                     var s2 = true;
                     var i2 = true;
                     var star2 = true;
+                    if (keep_going) {
+                        offset = findOffset(screenShot, supportImage, 2384, 924, 28, 112);
+                    }
                     if(servantImage != undefined){
                         if(!checkImage(screenShot,servantImage,100,460+offset,310,195)){
                             s1 = false;
@@ -281,7 +284,7 @@ function selectFriend(filter,servant,item,star){
                     return;
                 }
                 if (keep_going){
-                    scrollFriendList();
+                    scrollFriendList(2*offset);
                 } else {
                     break;
                 }
@@ -312,8 +315,12 @@ function reloadFriend(){
     }
 }
 
-function scrollFriendList(){
-    swipeScale(800,1000,800,200,300);
+function scrollFriendList(offset){
+    if (offset > 0) {
+        offset = 0;
+    }
+    console.log("scroll offset:"+(1000-200+offset));
+    swipeScale(800,1000,800,200-offset,300);
 }
 
 //-----------------------------------------------------team menu
