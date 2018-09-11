@@ -353,13 +353,21 @@ function getCurrentStage(){
     var width = currentStageW* screenScale[0];
     var height = currentStageH* screenScale[1];
     var screenShot = getScreenshot();
-    var crop = cropImage(screenShot,currentStageX * screenScale[0] + screenOffset[0],currentStageY * screenScale[1] + screenOffset[1],width,height);
+    var crop = cropImage(screenShot,currentStageX * screenScale[0] + screenOffset[0] - 1,currentStageY * screenScale[1] + screenOffset[1] - 1,width+2,height+2);
+    var grayCrop = bgrToGray(crop);
+    threshold(grayCrop, 180, 255);
     var score = [];
     for(var i=0;i<3;i++){
         var scaleImage = resizeImage(currentStageImage[i],width,height);
-        score[i] = getIdentityScore(crop,scaleImage);
+        var grayImage = bgrToGray(scaleImage);
+        threshold(grayImage, 180, 255);
+        var find = findImage(grayCrop, grayImage);
+        score[i] = find.score;
+        releaseImage(grayImage);
         releaseImage(scaleImage);
     }
+    console.log("scores: " + score[0] + "," + score[1] + "," + score[2]);
+    releaseImage(grayCrop);
     releaseImage(crop);
     releaseImage(screenShot);
     var result;
