@@ -34,6 +34,8 @@ var checkBoxImage;
 var checkBoxPointImage;
 var presentBoxFullImgae;
 var ultFailedImage;
+var erodedImage;
+var maskImage;
 
 var selectStartImage = [];
 var selectBackImage;
@@ -250,6 +252,9 @@ function releaseAllImage(){
     releaseImage(checkBoxImage);
     releaseImage(checkBoxPointImage);
     releaseImage(presentBoxFullImgae);
+
+    releaseImage(erodedImage);
+    releaseImage(maskImage);
 }
 
 function initScreenSize(){
