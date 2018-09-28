@@ -287,17 +287,17 @@ function useClothesSkill(skill,target1,target2){
 
     if(target1 != undefined && (target2 == undefined || target2 == -1)){
         selectSkillTarget(target1);
+        sleep(1000);
     }else if(target1!=undefined && target2 !=undefined){
         changePlayer(target1,target2);
+        sleep(1000);
     }
-    sleep(1000);    
     var screenShot = getScreenshot();
     if(checkImage(screenShot,skillNullImage,2085,142,69,67)){
         tapScale(2100,170,100);
         releaseImage(screenShot);
         return;
     }
-    waitUntilPlayerCanMove();
 }
 
 function selectEnemy(enemy){
