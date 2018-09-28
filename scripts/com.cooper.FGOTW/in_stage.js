@@ -26,8 +26,10 @@ function checkPlayerCanMove(){
             }
         }
         releaseImage(screenShot);
-        if (j == 0) {
-            sleep(1000);
+        if (j == 0 && longWait) {
+            sleep(500);
+        } if (j == 1) {
+            longWait = false;
         }
     }
     return true;
@@ -67,6 +69,7 @@ function waitUntilPlayerCanMoveOrFinish(){
         }
         cnt = (cnt + 1 )%10;
         if(cnt == 0){
+            longWait = true;
             console.log("waitUntilPlayerCanMoveOrFinish still looping");
         }
         var screenShot = getScreenshot();

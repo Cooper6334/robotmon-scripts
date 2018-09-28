@@ -255,6 +255,7 @@ function attackAI(mainColor,sameColor,weak,die,ult,skill,currentStage){
     console.log("Ult:"+ultList);
     console.log("Card:"+cardList);
     console.log("Status:"+cardStatus);
+    longWait = true;
     for(var i =0;i<3;i++){
         if(ult[i] >= 0 && currentStage >= ult[i] && (ultList[i] >= 0 || !checkUlt)){
             useUlt(i);

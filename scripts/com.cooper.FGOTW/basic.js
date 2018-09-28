@@ -74,6 +74,7 @@ var screenScale = [];
 var screenOffset = [];
 var realScreenSize = [];
 var runningScriptName = "";
+var longWait = false;
 
 var checkBoxPosition = [];
 var checkBoxPointPosition = [];
