@@ -87,7 +87,7 @@ function waitUntilPlayerCanMoveOrFinish(){
             }
         } else {
             releaseImage(screenShot);
-            var q = isQuestFinish();
+            var q = isQuestFinish(true);
             if(q >= 0){
                 console.log("Quest finish "+q);
                 return false;
@@ -383,12 +383,16 @@ function getCurrentStage(){
     }
     return result;
 }
-function isQuestFinish(){
+function isQuestFinish(inBattle){
     var positionX = [2280,120,990,1294,222, 215,1390,141,1480,1083, 210];
     var positionY = [1340,140,165, 362,142, 137, 550,317, 500,1337, 145];
     var positionW = [190 ,200,230, 373,545,2141, 510,649, 420, 376,  90];
     var positionH = [55  ,110,285,  89, 77, 233,  40,113,  60,  77,  70];
     var sameImage = [-1,-1];
+    if(inBattle == undefined) {
+        inBattle = false;
+    }
+
     for(var j = 0;j<2;j++){
         var screenShot = getScreenshot();
         for(var i = 0;i<10;i++){
@@ -396,20 +400,26 @@ function isQuestFinish(){
                 return -1;
             }
             if(checkImage(screenShot,finishStageImage[i],positionX[i],positionY[i],positionW[i],positionH[i])){
-                if(checkImage(screenShot,whiteImage,1000,500,500,500)){
-                    console.log("Get white image");
-                    releaseImage(screenShot);
-                    return -1;
-                }else if(checkImage(screenShot,stageNotFinishImage,1950,1400,150,20)){
-                    console.log("Get critical, still in stage");
-                    releaseImage(screenShot);
-                    return -1;
+                if (inBattle) {
+                    if(checkImage(screenShot,whiteImage,1000,500,500,500)){
+                        console.log("Get white image");
+                        releaseImage(screenShot);
+                        return -1;
+                    }else if(checkImage(screenShot,stageNotFinishImage,1950,1400,150,20)){
+                        console.log("Get critical, still in stage");
+                        releaseImage(screenShot);
+                        return -1;
+                    }
                 }
                 sameImage[j]=i;
                 break;
             }
         }
-        sleep(1000);
+        if (inBattle) {
+            sleep(1000);
+        } else {
+            sleep(200);
+        }
         releaseImage(screenShot);
     }
     if(sameImage[0] == sameImage[1]){

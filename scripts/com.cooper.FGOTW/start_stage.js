@@ -441,7 +441,7 @@ function finishQuest(){
         if(!isScriptRunning){
             return;
         }
-        var r = isQuestFinish();
+        var r = isQuestFinish(false);
         switch(r){
             case -1:
                 var screenShot3 = getScreenshot();
