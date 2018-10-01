@@ -209,7 +209,7 @@ function selectFriend(filter,servant,item,star,friend){
                 if (keep_going && checkImage(screenShot, arrowDownImage, 2452, 1396, 56, 28)) {
                     console.log("End of list");
                     sleep(2000);
-                    offset = 240;
+                    offset = 210;
                     keep_going = false;
                     releaseImage(screenShot);
                     continue;
