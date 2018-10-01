@@ -417,7 +417,7 @@ function extractStar(img, maskSmall, x, y, width, height) {
     return masked;
 }
 
-function checkStar(screenShot,erodedSmall,maskSmall,x,y,width,height,find_threshold){
+function checkStarEdge(screenShot,erodedSmall,maskSmall,x,y,width,height,find_threshold){
     var size = getImageSize(screenShot);
     if(size.width < size.height){
         console.log("screen orientation wrong");

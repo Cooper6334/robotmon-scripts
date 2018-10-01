@@ -264,13 +264,13 @@ function selectFriend(filter,servant,item,star,friend){
                             var shortImage = cropImage(itemImage,0,0,itemSize.width,((itemSize.height * 0.667) | 0));
                             if(!checkImage(screenShot,shortImage,100,655+offset,310,60,0.9)){
                                 i1 = false;
-                            }else if(star == 1 && !checkStar(screenShot,erodedImage,maskImage,360,696+offset,46,46)){
+                            }else if(star == 1 && !checkStarEdge(screenShot,erodedImage,maskImage,360,696+offset,46,46)){
                             //}else if(star == 1 && !checkImage(screenShot,starImage,377,713,14,14)){
                                 star1 = false;
                             }
                             if(!checkImage(screenShot,shortImage,100,1055+offset,310,60,0.9)){
                                 i2 = false;
-                            }else if(star == 1 && !checkStar(screenShot,erodedImage,maskImage,360,1096+offset,46,46)){
+                            }else if(star == 1 && !checkStarEdge(screenShot,erodedImage,maskImage,360,1096+offset,46,46)){
                             //}else if(star == 1 && !checkImage(screenShot,starImage,377,1113,14,14)){
                                 star2 = false;
                             }
