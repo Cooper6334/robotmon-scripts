@@ -15,19 +15,24 @@ function checkPlayerCanMove(){
     var y = [1285,370,600];
     var w = [220,120,120];
     var h = [65,80,80];
-    var r = [true,true];
     for(var j = 0;j<2;j++){
         var screenShot = getScreenshot();
         for(var i = 0;i<3;i++){
             if(!checkImage(screenShot,selectStartImage[i],x[i],y[i],w[i],h[i])){
-                r[j] = false;
-                break;
+                releaseImage(screenShot);
+                tapScale(1280,720,100);
+                sleep(1000);
+                return false;
             }
         }
         releaseImage(screenShot);
-        sleep(1000);
+        if (j == 0 && longWait) {
+            sleep(500);
+        } if (j == 1) {
+            longWait = false;
+        }
     }
-    return r[0]&&r[1];
+    return true;
 }
 
 function waitUntilPlayerCanMove(){
@@ -45,7 +50,14 @@ function waitUntilPlayerCanMove(){
         }
         sleep(1500);
     }*/
-    return waitUntilPlayerCanMoveOrFinish();
+    var ongoing  = waitUntilPlayerCanMoveOrFinish();
+    if (ongoing) {
+        return true;
+    } else {
+        console.log("Double check if the quest is really finished");
+        sleep(1000);
+        return waitUntilPlayerCanMoveOrFinish();
+    }
 }
 
 function waitUntilPlayerCanMoveOrFinish(){
@@ -57,6 +69,7 @@ function waitUntilPlayerCanMoveOrFinish(){
         }
         cnt = (cnt + 1 )%10;
         if(cnt == 0){
+            longWait = true;
             console.log("waitUntilPlayerCanMoveOrFinish still looping");
         }
         var screenShot = getScreenshot();
@@ -66,16 +79,19 @@ function waitUntilPlayerCanMoveOrFinish(){
             isScriptRunning = false;
             releaseImage(screenShot);
             return false;
-        }
-        releaseImage(screenShot);
-        if(checkPlayerCanMove()){
-            console.log("Player can move");
-            return true;
-        }
-        var q = isQuestFinish();
-        if(q >= 0){
-            console.log("Quest finish "+q);
-            return false;            
+        } else if(checkImage(screenShot,stageNotFinishImage,1950,1400,150,20)){
+            releaseImage(screenShot);
+            if(checkPlayerCanMove()){
+                console.log("Player can move");
+                return true;
+            }
+        } else {
+            releaseImage(screenShot);
+            var q = isQuestFinish(true);
+            if(q >= 0){
+                console.log("Quest finish "+q);
+                return false;
+            }
         }
     }
 }
@@ -196,7 +212,6 @@ function useSkill(player,skill,target,checkUsed){
         selectSkillTarget(target);
     }
     releaseImage(screenShot2);
-    sleep(3000);
 }
 
 function selectSkillTarget(player){
@@ -272,17 +287,17 @@ function useClothesSkill(skill,target1,target2){
 
     if(target1 != undefined && (target2 == undefined || target2 == -1)){
         selectSkillTarget(target1);
+        sleep(1000);
     }else if(target1!=undefined && target2 !=undefined){
         changePlayer(target1,target2);
+        sleep(1000);
     }
-    sleep(1000);    
     var screenShot = getScreenshot();
     if(checkImage(screenShot,skillNullImage,2085,142,69,67)){
         tapScale(2100,170,100);
         releaseImage(screenShot);
         return;
     }
-    sleep(3000);
 }
 
 function selectEnemy(enemy){
@@ -341,13 +356,21 @@ function getCurrentStage(){
     var width = currentStageW* screenScale[0];
     var height = currentStageH* screenScale[1];
     var screenShot = getScreenshot();
-    var crop = cropImage(screenShot,currentStageX * screenScale[0] + screenOffset[0],currentStageY * screenScale[1] + screenOffset[1],width,height);
+    var crop = cropImage(screenShot,currentStageX * screenScale[0] + screenOffset[0] - 1,currentStageY * screenScale[1] + screenOffset[1] - 1,width+2,height+2);
+    var grayCrop = bgrToGray(crop);
+    threshold(grayCrop, 180, 255);
     var score = [];
     for(var i=0;i<3;i++){
         var scaleImage = resizeImage(currentStageImage[i],width,height);
-        score[i] = getIdentityScore(crop,scaleImage);
+        var grayImage = bgrToGray(scaleImage);
+        threshold(grayImage, 180, 255);
+        var find = findImage(grayCrop, grayImage);
+        score[i] = find.score;
+        releaseImage(grayImage);
         releaseImage(scaleImage);
     }
+    console.log("scores: " + score[0] + "," + score[1] + "," + score[2]);
+    releaseImage(grayCrop);
     releaseImage(crop);
     releaseImage(screenShot);
     var result;
@@ -360,12 +383,16 @@ function getCurrentStage(){
     }
     return result;
 }
-function isQuestFinish(){
+function isQuestFinish(inBattle){
     var positionX = [2280,120,990,1294,222, 215,1390,141,1480,1083, 210];
     var positionY = [1340,140,165, 362,142, 137, 550,317, 500,1337, 145];
     var positionW = [190 ,200,230, 373,545,2141, 510,649, 420, 376,  90];
     var positionH = [55  ,110,285,  89, 77, 233,  40,113,  60,  77,  70];
     var sameImage = [-1,-1];
+    if(inBattle == undefined) {
+        inBattle = false;
+    }
+
     for(var j = 0;j<2;j++){
         var screenShot = getScreenshot();
         for(var i = 0;i<10;i++){
@@ -373,20 +400,26 @@ function isQuestFinish(){
                 return -1;
             }
             if(checkImage(screenShot,finishStageImage[i],positionX[i],positionY[i],positionW[i],positionH[i])){
-                if(checkImage(screenShot,whiteImage,1000,500,500,500)){
-                    console.log("Get white image");
-                    releaseImage(screenShot);
-                    return -1;
-                }else if(checkImage(screenShot,stageNotFinishImage,1950,1400,150,20)){
-                    console.log("Get critical, still in stage");
-                    releaseImage(screenShot);
-                    return -1;
+                if (inBattle) {
+                    if(checkImage(screenShot,whiteImage,1000,500,500,500)){
+                        console.log("Get white image");
+                        releaseImage(screenShot);
+                        return -1;
+                    }else if(checkImage(screenShot,stageNotFinishImage,1950,1400,150,20)){
+                        console.log("Get critical, still in stage");
+                        releaseImage(screenShot);
+                        return -1;
+                    }
                 }
                 sameImage[j]=i;
                 break;
             }
         }
-        sleep(1000);
+        if (inBattle) {
+            sleep(1000);
+        } else {
+            sleep(200);
+        }
         releaseImage(screenShot);
     }
     if(sameImage[0] == sameImage[1]){
