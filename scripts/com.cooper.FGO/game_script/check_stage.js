@@ -356,6 +356,9 @@ icon["battleServant2"] = [375, 90, 600, 45];
 icon["battleSkill"] = [855, 255, 210, 45];
 icon["kkl"] = [800, 600, 300, 80];
 icon["kkl2"] = [1640, 240, 60, 60];
+icon["kklSkill1"] = [261, 354, 183, 183];
+icon["kklSkill2"] = [261, 354, 183, 183];
+icon["kklSkill3"] = [261, 354, 183, 183];
 icon["battleTarget"] = [1620, 195, 60, 60];
 icon["spaceColor"] = [690, 288, 540, 45];
 icon["emiyaColor"] = [690, 240, 540, 90];
@@ -364,12 +367,17 @@ icon["dubaiSkill2"] = [760, 220, 395, 90];
 icon["dubaiSkill3"] = [760, 220, 395, 90];
 icon["rabbitSkill"] = [765, 600, 370, 60];
 icon["rabbitSkill2"] = [1245, 600, 370, 60];
+icon["rabbitSkill3"] = [261, 354, 183, 183];
 icon["kishinamiSkill"] = [660, 600, 260, 60];
 icon["kishinamiSkill2"] = [1000, 600, 260, 60];
 icon["kishinamiSkill3"] = [1360, 600, 260, 60];
 icon["soujyuroSkill"] = [660, 600, 260, 60];
 icon["soujyuroSkill2"] = [1000, 600, 260, 60];
 icon["soujyuroSkill3"] = [1360, 600, 260, 60];
+icon["lilithSkill"] = [261, 354, 183, 183];
+icon["lilithSkill2"] = [306, 597, 348, 74];
+icon["lilithSkill3"] = [786, 597, 348, 74];
+icon["lilithSkill4"] = [1266, 597, 348, 74];
 icon["ultFailed"] = [900, 637, 123, 60];
 icon["skillFailed"] = [870, 802, 180, 60];
 icon["settingDialog"] = [750, 140, 350, 60];
@@ -431,7 +439,28 @@ function isBattleSkillDetailDialog(screenshot) {
 }
 
 function isBattleKklDialog(screenshot) {
-  return checkIconListInScreen(["kkl", "kkl2"], true, 0.85, screenshot);
+  var s = screenshot;
+  if (s == undefined || s == null) {
+    s = getScreenshotResize();
+  }
+  var result = checkIconListInScreen(["kkl", "kkl2"], true, 0.85, s);
+  if (result && isBattleSkillRabbitDialog(s)) {
+    //the rabbit dialog has the same layout, make sure it is not that one
+    result = false;
+  }
+  if (result) {
+    //kklSkill1~3: skill icon of each skill, only one of them shows in the dialog
+    result = checkIconListInScreen(
+      ["kklSkill1", "kklSkill2", "kklSkill3"],
+      false,
+      0.85,
+      s
+    );
+  }
+  if (screenshot == undefined || screenshot == null) {
+    releaseImage(s);
+  }
+  return result;
 }
 
 function isBattleSkillSpaceDialog(screenshot) {
@@ -458,7 +487,7 @@ function isBattleSkillRabbitDialog(screenshot) {
     return false;
   }
   return checkIconListInScreen(
-    ["rabbitSkill", "rabbitSkill2"],
+    ["rabbitSkill", "rabbitSkill2", "rabbitSkill3"],
     true,
     0.85,
     screenshot
@@ -483,6 +512,19 @@ function isBattleSkillSoujyuroDialog(screenshot) {
   }
   return checkIconListInScreen(
     ["soujyuroSkill", "soujyuroSkill2", "soujyuroSkill3"],
+    true,
+    0.85,
+    screenshot
+  );
+}
+
+function isBattleSkillLilithDialog(screenshot) {
+  //lilithSkill: heart icon, lilithSkill2: cancel, lilithSkill3: not grant, lilithSkill4: grant
+  if (server == "TW") {
+    return false;
+  }
+  return checkIconListInScreen(
+    ["lilithSkill", "lilithSkill2", "lilithSkill3", "lilithSkill4"],
     true,
     0.85,
     screenshot
